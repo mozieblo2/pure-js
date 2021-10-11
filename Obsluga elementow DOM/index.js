@@ -5,6 +5,15 @@ const INPUT = 'input';
 const TEXT_AREA = 'textArea';
 
 window.addEventListener('load', function() {
+    /* =============================================
+               MODEL
+     ============================================== */
+
+    /* ----------------------------------------
+        STATE
+    ---------------------------------------- */
+
+    let addedData = []
 
     /* =============================================
                     VIEW
@@ -124,6 +133,11 @@ window.addEventListener('load', function() {
             buttonUp.classList.remove('button-is-colored');
             buttonDown.classList.remove('button-is-colored');
         })
+
+        buttonRemove.onclick = (e) => {
+            const elementId = e.currentTarget.id;
+            removeItem(elementId);
+        }
     }
 
     /* ----------------------------------------
@@ -174,16 +188,6 @@ window.addEventListener('load', function() {
     textAreaAndButtonContainer.appendChild(submitInput);
 
     /* =============================================
-                   MODEL
-    ============================================== */
-
-    /* ----------------------------------------
-        STATE
-    ---------------------------------------- */
-
-    let addedData = []
-
-    /* =============================================
                    CONTROLLER
     ============================================== */
 
@@ -202,13 +206,22 @@ window.addEventListener('load', function() {
             description: textArea.value
         }];
 
-        createListItem(nameInput.value, ageInput.value, textArea.value, id);
+        createListItem(addedData[addedData.length-1].name, addedData[addedData.length-1].age, addedData[addedData.length-1].description, addedData[addedData.length-1].id);
 
         nameInput.value = '';
         ageInput.value = '';
         textArea.value = '';
+    }
 
-        console.log(addedData);
+    /* ----------------------------------------
+        REMOVE item from list
+    ---------------------------------------- */
+
+    const removeItem = (elementId) => {
+        addedData = addedData.filter(data => data.id !== elementId);
+
+        const removeElement = document.getElementById(elementId);
+        removeElement?.parentNode.removeChild(removeElement);
     }
 });
 

@@ -5,6 +5,11 @@ const INPUT = 'input';
 const TEXT_AREA = 'textArea';
 
 window.addEventListener('load', function() {
+
+    /* =============================================
+                    VIEW
+     ============================================== */
+
     /* ----------------------------------------
      CONTAINER: create node elements with attributes
     ---------------------------------------- */
@@ -13,80 +18,113 @@ window.addEventListener('load', function() {
     const containerWrapper = document.createElement(DIV);
     containerWrapper.className = 'container-wrapper';
 
-    const inputsWrapper = document.createElement(DIV);
-    inputsWrapper.className = 'inputs-wrapper';
-
-    const listAndButtonWrapper = document.createElement(DIV);
-    listAndButtonWrapper.className = 'list-button-wrapper';
-
-    const contentWrapper = document.createElement(DIV);
-    contentWrapper.className = 'content-wrapper';
-
-    const nameArea = document.createElement(DIV);
-    nameArea.className = 'name-area';
-
-    const ageArea = document.createElement(DIV);
-    ageArea.className = 'age-area';
-
-    const listArea = document.createElement(DIV);
-    listArea.className = 'list-area';
-
-    const buttonsContainer = document.createElement(DIV);
-    buttonsContainer.className = 'buttons-container';
-
-    const buttonUp = document.createElement(DIV);
-    buttonUp.className = 'button-up';
-
-    const buttonDown = document.createElement(DIV);
-    buttonDown.className = 'button-down';
-
-    const buttonRemove = document.createElement(DIV);
-    buttonRemove.className = 'button-remove';
-
-    // text paragraph put in div
-    const nameParagraph = document.createElement(P);
-    const nameText = document.createTextNode('Imie i nazwisko');
-    nameParagraph.appendChild(nameText);
-    nameArea.appendChild(nameParagraph);
-
-    const ageParagraph = document.createElement(P);
-    const ageText = document.createTextNode('Wiek');
-    ageParagraph.appendChild(ageText);
-    ageArea.appendChild(ageParagraph);
-
-    const listParagraph = document.createElement(P);
-    const listText = document.createTextNode('Opis');
-    listParagraph.appendChild(listText);
-    listArea.appendChild(listParagraph);
-
-    const buttonUpParagraph = document.createElement(P);
-    const buttonUpText = document.createTextNode('/\\');
-    buttonUpParagraph.appendChild(buttonUpText);
-    buttonUp.appendChild(buttonUpParagraph);
-
-    const buttonDownParagraph = document.createElement(P);
-    const buttonDownText = document.createTextNode('\\/');
-    buttonDownParagraph.appendChild(buttonDownText);
-    buttonDown.appendChild(buttonDownParagraph);
-
-    const buttonRemoveParagraph = document.createElement(P);
-    const buttonRemoveText = document.createTextNode('X');
-    buttonRemoveParagraph.appendChild(buttonRemoveText);
-    buttonRemove.appendChild(buttonRemoveParagraph);
-
-    // insert element to document body
     document.body.appendChild(containerWrapper);
-    containerWrapper.appendChild(contentWrapper);
-    contentWrapper.appendChild(inputsWrapper);
-    inputsWrapper.appendChild(nameArea);
-    inputsWrapper.appendChild(ageArea);
-    contentWrapper.appendChild(listAndButtonWrapper);
-    listAndButtonWrapper.appendChild(listArea);
-    listArea.appendChild(buttonsContainer);
-    buttonsContainer.appendChild(buttonUp);
-    buttonsContainer.appendChild(buttonDown);
-    containerWrapper.appendChild(buttonRemove);
 
+    function createListItem(nameText, ageText, descriptionText, id) {
+        const inputsWrapper = document.createElement(DIV);
+        inputsWrapper.className = 'inputs-wrapper';
+
+        const listAndButtonWrapper = document.createElement(DIV);
+        listAndButtonWrapper.className = 'list-button-wrapper';
+
+        const contentWrapper = document.createElement(DIV);
+        contentWrapper.className = 'content-wrapper';
+        contentWrapper.id = id;
+
+        const nameArea = document.createElement(DIV);
+        nameArea.className = 'name-area';
+
+        const ageArea = document.createElement(DIV);
+        ageArea.className = 'age-area';
+
+        const listArea = document.createElement(DIV);
+        listArea.className = 'list-area';
+
+        const descriptionContainer = document.createElement(DIV);
+        descriptionContainer.className = 'description-container';
+
+        const buttonsContainer = document.createElement(DIV);
+        buttonsContainer.className = 'buttons-container';
+
+        const buttonUp = document.createElement(DIV);
+        buttonUp.className = 'button-up';
+
+        const buttonDown = document.createElement(DIV);
+        buttonDown.className = 'button-down';
+
+        const buttonRemove = document.createElement(DIV);
+        buttonRemove.className = 'button-remove';
+        buttonRemove.id = id;
+
+        const buttonUpParagraph = document.createElement(P);
+        const buttonUpText = document.createTextNode('/\\');
+        buttonUpParagraph.appendChild(buttonUpText);
+        buttonUp.appendChild(buttonUpParagraph);
+
+        const buttonDownParagraph = document.createElement(P);
+        const buttonDownText = document.createTextNode('\\/');
+        buttonDownParagraph.appendChild(buttonDownText);
+        buttonDown.appendChild(buttonDownParagraph);
+
+        const buttonRemoveParagraph = document.createElement(P);
+        const buttonRemoveText = document.createTextNode('X');
+        buttonRemoveParagraph.appendChild(buttonRemoveText);
+        buttonRemove.appendChild(buttonRemoveParagraph);
+
+        // insert element to document body
+        containerWrapper.appendChild(contentWrapper);
+        contentWrapper.appendChild(inputsWrapper);
+        inputsWrapper.appendChild(nameArea);
+        inputsWrapper.appendChild(ageArea);
+        contentWrapper.appendChild(listAndButtonWrapper);
+        listAndButtonWrapper.appendChild(listArea);
+        listArea.appendChild(descriptionContainer);
+        listArea.appendChild(buttonsContainer);
+        buttonsContainer.appendChild(buttonUp);
+        buttonsContainer.appendChild(buttonDown);
+        contentWrapper.appendChild(buttonRemove);
+
+        // add name to name text area
+        const nameItem = document.createElement(P);
+        nameItem.id = id;
+        const nameItemText = document.createTextNode(nameText);
+        nameItem.appendChild(nameItemText);
+        nameArea.appendChild(nameItem);
+
+        // add age to name text area
+        const ageItem = document.createElement(P);
+        ageItem.id = id;
+        const ageItemText = document.createTextNode(ageText);
+        ageItem.appendChild(ageItemText);
+        ageArea.appendChild(ageItem);
+
+        // add description to name text area
+        const listItem = document.createElement(P);
+        listItem.id = id;
+        const listItemText = document.createTextNode(descriptionText);
+        listItem.appendChild(listItemText);
+        descriptionContainer.appendChild(listItem);
+
+        /* ----------------------------------------
+            COLORED: color container on hover
+            ---------------------------------------- */
+
+        contentWrapper.addEventListener('mouseenter', function() {
+            nameArea.classList.add('name-is-colored');
+            ageArea.classList.add('age-is-colored');
+            listArea.classList.add('list-is-colored');
+            buttonUp.classList.add('button-is-colored');
+            buttonDown.classList.add('button-is-colored');
+        })
+
+        contentWrapper.addEventListener('mouseleave', function() {
+            nameArea.classList.remove('name-is-colored');
+            ageArea.classList.remove('age-is-colored');
+            listArea.classList.remove('list-is-colored');
+            buttonUp.classList.remove('button-is-colored');
+            buttonDown.classList.remove('button-is-colored');
+        })
+    }
 
     /* ----------------------------------------
         FORM: create node elements with attributes
@@ -135,24 +173,42 @@ window.addEventListener('load', function() {
     textAreaAndButtonContainer.appendChild(textArea);
     textAreaAndButtonContainer.appendChild(submitInput);
 
+    /* =============================================
+                   MODEL
+    ============================================== */
+
     /* ----------------------------------------
-     COLORED: color container on hover
+        STATE
     ---------------------------------------- */
 
-    containerWrapper.addEventListener('mouseenter', function() {
-        nameArea.classList.add('name-is-colored');
-        ageArea.classList.add('age-is-colored');
-        listArea.classList.add('list-is-colored');
-        buttonUp.classList.add('button-is-colored');
-        buttonDown.classList.add('button-is-colored');
-    })
+    let addedData = []
 
-    containerWrapper.addEventListener('mouseleave', function() {
-        nameArea.classList.remove('name-is-colored');
-        ageArea.classList.remove('age-is-colored');
-        listArea.classList.remove('list-is-colored');
-        buttonUp.classList.remove('button-is-colored');
-        buttonDown.classList.remove('button-is-colored');
-    })
+    /* =============================================
+                   CONTROLLER
+    ============================================== */
+
+    /* ----------------------------------------
+        ADD item to list
+    ---------------------------------------- */
+
+    submitInput.onclick = (e) => {
+        e.preventDefault();
+        const id = Math.random().toString();
+
+        addedData = [...addedData, {
+            id,
+            name: nameInput.value,
+            age: ageInput.value,
+            description: textArea.value
+        }];
+
+        createListItem(nameInput.value, ageInput.value, textArea.value, id);
+
+        nameInput.value = '';
+        ageInput.value = '';
+        textArea.value = '';
+
+        console.log(addedData);
+    }
 });
 

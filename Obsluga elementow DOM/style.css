@@ -1,0 +1,92 @@
+div, form, .content-wrapper {
+    padding: 25px;
+}
+
+.form, .content-wrapper {
+    display: flex;
+    justify-content: space-between;
+}
+
+.form-container, .inputs-container, .container-wrapper, .inputs-wrapper {
+    border: 3px solid red;
+}
+
+.container-wrapper {
+    position: relative;
+}
+
+.inputs-container, .inputs-wrapper {
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+}
+
+.text-button-container, .list-button-wrapper {
+    width: 70%;
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: end;
+}
+
+.form, .submit-input, .content-wrapper {
+    border: 3px solid green;
+}
+
+.name-input, .age-input, .name-area, .age-area {
+    height: 100px;
+}
+
+.name-input, .name-area {
+    border: 3px solid yellow;
+    margin-bottom: 20px;
+}
+
+.age-input, .age-area, .buttons-container  {
+    border: 3px solid blue;
+}
+
+.text-area, .list-area {
+    border: 3px solid orange;
+    width: 100%;
+    height: 60%;
+    resize: none;
+}
+
+.list-area {
+    padding: 15px 15px 15px 0;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    width: 97%;
+}
+
+.list-area > p {
+    padding-left: 15px;
+}
+
+.button-up, .button-down {
+    border: 3px solid purple;
+}
+
+.buttons-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.button-remove {
+    position: absolute;
+    border: 3px solid brown;
+    background-color: brown;
+    border-radius: 50%;
+    width: 10px;
+    height: 10px;
+    top: 0;
+    right: 0;
+}
+
+.button-remove p {
+    margin: 0;
+}

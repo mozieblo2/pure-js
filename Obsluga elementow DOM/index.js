@@ -134,5 +134,25 @@ window.addEventListener('load', function() {
     form.appendChild(textAreaAndButtonContainer);
     textAreaAndButtonContainer.appendChild(textArea);
     textAreaAndButtonContainer.appendChild(submitInput);
+
+    /* ----------------------------------------
+     COLORED: color container on hover
+    ---------------------------------------- */
+
+    containerWrapper.addEventListener('mouseenter', function() {
+        nameArea.classList.add('name-is-colored');
+        ageArea.classList.add('age-is-colored');
+        listArea.classList.add('list-is-colored');
+        buttonUp.classList.add('button-is-colored');
+        buttonDown.classList.add('button-is-colored');
+    })
+
+    containerWrapper.addEventListener('mouseleave', function() {
+        nameArea.classList.remove('name-is-colored');
+        ageArea.classList.remove('age-is-colored');
+        listArea.classList.remove('list-is-colored');
+        buttonUp.classList.remove('button-is-colored');
+        buttonDown.classList.remove('button-is-colored');
+    })
 });
 

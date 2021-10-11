@@ -90,3 +90,18 @@ div, form, .content-wrapper {
 .button-remove p {
     margin: 0;
 }
+
+.name-is-colored {
+    background-color: yellow;
+}
+
+.age-is-colored {
+    background-color: blue;
+}
+.list-is-colored {
+    background-color: orange;
+}
+
+.button-is-colored {
+    background-color: purple;
+}

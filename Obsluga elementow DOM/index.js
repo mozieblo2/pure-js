@@ -26,6 +26,7 @@ window.addEventListener('load', function() {
     // div
     const containerWrapper = document.createElement(DIV);
     containerWrapper.className = 'container-wrapper';
+    containerWrapper.id = 'container-wrapper';
 
     document.body.appendChild(containerWrapper);
 
@@ -69,11 +70,13 @@ window.addEventListener('load', function() {
         const buttonUpText = document.createTextNode('/\\');
         buttonUpParagraph.appendChild(buttonUpText);
         buttonUp.appendChild(buttonUpParagraph);
+        buttonUp.id = id;
 
         const buttonDownParagraph = document.createElement(P);
         const buttonDownText = document.createTextNode('\\/');
         buttonDownParagraph.appendChild(buttonDownText);
         buttonDown.appendChild(buttonDownParagraph);
+        buttonDown.id = id;
 
         const buttonRemoveParagraph = document.createElement(P);
         const buttonRemoveText = document.createTextNode('X');
@@ -138,6 +141,14 @@ window.addEventListener('load', function() {
             const elementId = e.currentTarget.id;
             removeItem(elementId);
         }
+
+        buttonUp.onclick = (e) => {
+            moveItemUp(e);
+        }
+
+        buttonDown.onclick = (e) => {
+            moveItemDown(e);
+        }
     }
 
     /* ----------------------------------------
@@ -199,6 +210,7 @@ window.addEventListener('load', function() {
         e.preventDefault();
         const id = Math.random().toString();
 
+        // add in array
         addedData = [...addedData, {
             id,
             name: nameInput.value,
@@ -206,7 +218,10 @@ window.addEventListener('load', function() {
             description: textArea.value
         }];
 
-        createListItem(addedData[addedData.length-1].name, addedData[addedData.length-1].age, addedData[addedData.length-1].description, addedData[addedData.length-1].id);
+        const lastElement = addedData[addedData.length-1];
+
+        // add in DOM
+        createListItem(lastElement.name, lastElement.age, lastElement.description, lastElement.id);
 
         nameInput.value = '';
         ageInput.value = '';
@@ -218,10 +233,117 @@ window.addEventListener('load', function() {
     ---------------------------------------- */
 
     const removeItem = (elementId) => {
+        // remove in array
         addedData = addedData.filter(data => data.id !== elementId);
 
+        // remove in DOM
         const removeElement = document.getElementById(elementId);
         removeElement?.parentNode.removeChild(removeElement);
     }
-});
 
+    /* ----------------------------------------
+        MOVE items
+    ---------------------------------------- */
+
+    const moveItemUp = (e) => {
+        const currentId = e.currentTarget.id;
+        addedData?.map((data, index) => {
+            if (data.id === currentId) {
+                if (index === 0) {
+                    if (addedData.length > 1) {
+                        // move element to list end
+                        // change order in array
+                        const firstElement = addedData.splice(0, 1);
+                        addedData = [...addedData, firstElement[0]];
+
+                        // move in DOM
+                        const moveElement = document.getElementById(currentId);
+                        const parent = moveElement?.parentNode;
+                        parent.removeChild(moveElement);
+                        parent.appendChild(moveElement);
+                    }
+                } else {
+                    // move element up
+                    // change order in array
+                    let siblingDataIndex;
+                    let movedDataElement;
+                    const copyAddedData = [...addedData]
+                    copyAddedData?.map((data, index) => {
+                        if (data.id === currentId) {
+                            siblingDataIndex = index - 1;
+                            movedDataElement = copyAddedData.splice(index, 1);
+                        }
+                    })
+                    copyAddedData.splice(siblingDataIndex, 0, movedDataElement[0]);
+                    addedData = [...copyAddedData];
+
+                    // move in DOM
+                    const moveElement = document.getElementById(currentId);
+                    const parent = moveElement?.parentNode;
+                    const children = [...moveElement?.parentNode.childNodes];
+
+                    let siblingChildIndex;
+                    children.map((child, index) => {
+                        if (child.id === currentId) {
+                            siblingChildIndex = index - 1;
+                        }
+                    });
+                    parent.removeChild(moveElement);
+                    parent.insertBefore(moveElement, children[siblingChildIndex]);
+                }
+            }
+        });
+
+    }
+
+    const moveItemDown = (e) => {
+        const currentId = e.currentTarget.id;
+        const addedDataLength = addedData.length - 1;
+        addedData?.map((data, index) => {
+            if (data.id === currentId) {
+                if (index === addedDataLength) {
+                    if (addedData.length > 1) {
+                        // move element to list start
+                        // change order in array
+                        const lastElement = addedData.splice(index, 1);
+                        addedData = [lastElement[0], ...addedData];
+
+                        // move in DOM
+                        const moveElement = document.getElementById(currentId);
+                        const parent = moveElement?.parentNode;
+                        const children = [...moveElement?.parentNode.childNodes];
+                        parent.removeChild(moveElement);
+                        parent.insertBefore(moveElement, children[0]);
+                    }
+                } else {
+                    // move element down
+                    // change order in array
+                    let siblingDataIndex;
+                    let movedDataElement;
+                    const copyAddedData = [...addedData]
+                    copyAddedData?.map((data, index) => {
+                        if (data.id === currentId) {
+                            siblingDataIndex = index + 1;
+                            movedDataElement = copyAddedData.splice(index, 1);
+                        }
+                    })
+                    copyAddedData.splice(siblingDataIndex, 0, movedDataElement[0]);
+                    addedData = [...copyAddedData];
+
+                    // move in DOM
+                    const moveElement = document.getElementById(currentId);
+                    const parent = moveElement?.parentNode;
+                    const children = [...moveElement?.parentNode.childNodes];
+                    let siblingChildIndex;
+                    children.map((child, index) => {
+                        if (child.id === currentId) {
+                            siblingChildIndex = index + 2;
+                        }
+                    });
+                    parent.removeChild(moveElement);
+                    parent.insertBefore(moveElement, children[siblingChildIndex]);
+                }
+            }
+        })
+    }
+});

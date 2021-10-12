@@ -5,85 +5,78 @@ const INPUT = 'input';
 const TEXT_AREA = 'textArea';
 
 window.addEventListener('load', function() {
-    /* =============================================
-               MODEL
-     ============================================== */
+    //  ==========  STATE  ===========
+    let addedData = [];
 
-    /* ----------------------------------------
-        STATE
-    ---------------------------------------- */
-
-    let addedData = []
-
-    /* =============================================
-                    VIEW
-     ============================================== */
-
-    /* ----------------------------------------
-     CONTAINER: create node elements with attributes
-    ---------------------------------------- */
-
-    // div
-    const containerWrapper = document.createElement(DIV);
-    containerWrapper.className = 'container-wrapper';
-    containerWrapper.id = 'container-wrapper';
-
+    //  ==========  VIEW  ===========
+    const containerWrapper = createItem(DIV,'container-wrapper', 'container-wrapper');
     document.body.appendChild(containerWrapper);
 
+    containerWrapper.onclick = (e) => {
+        const targetElement = e.target;
+        const parentOfTargetElement = e.target.parentNode;
+        const targetInnerText = e.target.innerText;
+        if (targetInnerText === 'X') {
+            targetElement.id && removeItem(targetElement.id);
+            parentOfTargetElement.id && removeItem(parentOfTargetElement.id);
+        }
+
+        if (targetInnerText === '/\\') {
+            targetElement.id && moveItemUp(targetElement.id);
+            parentOfTargetElement.id && moveItemUp(parentOfTargetElement.id);
+        }
+
+        if (targetInnerText === '\\/') {
+            targetElement.id && moveItemDown(targetElement.id);
+            parentOfTargetElement.id && moveItemDown(parentOfTargetElement.id);
+        }
+    }
+
+    function createItem(tag, className, id, text) {
+        if (tag === DIV || tag === P || tag === FORM) {
+            const item = document.createElement(tag);
+            if (className) item.className = className;
+            if (id) item.id = id;
+            if (text) {
+                const itemWithText = document.createTextNode(text);
+                item.appendChild(itemWithText);
+            }
+
+            return item;
+        }
+    }
+
+    function createInputOrTextArea(tag, className, placeholder, type, value) {
+        if (tag === INPUT || tag === TEXT_AREA) {
+            const element = document.createElement(tag);
+            if (className) element.className = className;
+            if (placeholder) element.placeholder = placeholder;
+            if (type) element.type = type;
+            if (value) element.value = value;
+
+            return element;
+        }
+    }
+
     function createListItem(nameText, ageText, descriptionText, id) {
-        const inputsWrapper = document.createElement(DIV);
-        inputsWrapper.className = 'inputs-wrapper';
+        // CONTAINER: create node elements with attributes
+        const inputsWrapper = createItem(DIV,'inputs-wrapper');
+        const listAndButtonWrapper = createItem(DIV,'list-button-wrapper');
+        const contentWrapper = createItem(DIV,'content-wrapper', id);
+        const nameArea = createItem(DIV,'name-area');
+        const ageArea = createItem(DIV,'age-area');
+        const listArea = createItem(DIV,'list-area');
+        const descriptionContainer = createItem(DIV,'description-container');
+        const buttonsContainer = createItem(DIV,'buttons-container');
+        const buttonUp = createItem(DIV,'button-up', id);
+        const buttonDown = createItem(DIV,'button-down', id);
+        const buttonRemove = createItem(DIV,'button-remove', id);
 
-        const listAndButtonWrapper = document.createElement(DIV);
-        listAndButtonWrapper.className = 'list-button-wrapper';
+        buttonUp.appendChild(createItem(P, undefined, undefined,'/\\'));
+        buttonDown.appendChild(createItem(P, undefined, undefined,'\\/'));
+        buttonRemove.appendChild(createItem(P, undefined, undefined,'X'));
 
-        const contentWrapper = document.createElement(DIV);
-        contentWrapper.className = 'content-wrapper';
-        contentWrapper.id = id;
-
-        const nameArea = document.createElement(DIV);
-        nameArea.className = 'name-area';
-
-        const ageArea = document.createElement(DIV);
-        ageArea.className = 'age-area';
-
-        const listArea = document.createElement(DIV);
-        listArea.className = 'list-area';
-
-        const descriptionContainer = document.createElement(DIV);
-        descriptionContainer.className = 'description-container';
-
-        const buttonsContainer = document.createElement(DIV);
-        buttonsContainer.className = 'buttons-container';
-
-        const buttonUp = document.createElement(DIV);
-        buttonUp.className = 'button-up';
-
-        const buttonDown = document.createElement(DIV);
-        buttonDown.className = 'button-down';
-
-        const buttonRemove = document.createElement(DIV);
-        buttonRemove.className = 'button-remove';
-        buttonRemove.id = id;
-
-        const buttonUpParagraph = document.createElement(P);
-        const buttonUpText = document.createTextNode('/\\');
-        buttonUpParagraph.appendChild(buttonUpText);
-        buttonUp.appendChild(buttonUpParagraph);
-        buttonUp.id = id;
-
-        const buttonDownParagraph = document.createElement(P);
-        const buttonDownText = document.createTextNode('\\/');
-        buttonDownParagraph.appendChild(buttonDownText);
-        buttonDown.appendChild(buttonDownParagraph);
-        buttonDown.id = id;
-
-        const buttonRemoveParagraph = document.createElement(P);
-        const buttonRemoveText = document.createTextNode('X');
-        buttonRemoveParagraph.appendChild(buttonRemoveText);
-        buttonRemove.appendChild(buttonRemoveParagraph);
-
-        // insert element to document body
+        // CONTAINER: insert element to document body
         containerWrapper.appendChild(contentWrapper);
         contentWrapper.appendChild(inputsWrapper);
         inputsWrapper.appendChild(nameArea);
@@ -96,31 +89,12 @@ window.addEventListener('load', function() {
         buttonsContainer.appendChild(buttonDown);
         contentWrapper.appendChild(buttonRemove);
 
-        // add name to name text area
-        const nameItem = document.createElement(P);
-        nameItem.id = id;
-        const nameItemText = document.createTextNode(nameText);
-        nameItem.appendChild(nameItemText);
-        nameArea.appendChild(nameItem);
+        // CONTAINER: add text to text container
+        nameArea.appendChild(createItem(P, undefined, id, nameText));
+        ageArea.appendChild(createItem(P, undefined, id, ageText));
+        descriptionContainer.appendChild(createItem(P, undefined, id, descriptionText));
 
-        // add age to name text area
-        const ageItem = document.createElement(P);
-        ageItem.id = id;
-        const ageItemText = document.createTextNode(ageText);
-        ageItem.appendChild(ageItemText);
-        ageArea.appendChild(ageItem);
-
-        // add description to name text area
-        const listItem = document.createElement(P);
-        listItem.id = id;
-        const listItemText = document.createTextNode(descriptionText);
-        listItem.appendChild(listItemText);
-        descriptionContainer.appendChild(listItem);
-
-        /* ----------------------------------------
-            COLORED: color container on hover
-            ---------------------------------------- */
-
+        // COLORED: color container on hover
         contentWrapper.addEventListener('mouseenter', function() {
             nameArea.classList.add('name-is-colored');
             ageArea.classList.add('age-is-colored');
@@ -136,57 +110,17 @@ window.addEventListener('load', function() {
             buttonUp.classList.remove('button-is-colored');
             buttonDown.classList.remove('button-is-colored');
         })
-
-        buttonRemove.onclick = (e) => {
-            const elementId = e.currentTarget.id;
-            removeItem(elementId);
-        }
-
-        buttonUp.onclick = (e) => {
-            moveItemUp(e);
-        }
-
-        buttonDown.onclick = (e) => {
-            moveItemDown(e);
-        }
     }
 
-    /* ----------------------------------------
-        FORM: create node elements with attributes
-       ---------------------------------------- */
-    // div
-    const formContainer = document.createElement(DIV);
-    formContainer.className = 'form-container';
-
-    const inputsContainer = document.createElement(DIV);
-    inputsContainer.className = 'inputs-container';
-
-    const textAreaAndButtonContainer = document.createElement(DIV);
-    textAreaAndButtonContainer.className = 'text-button-container';
-
-    // form
-    const form = document.createElement(FORM);
-    form.className = 'form';
-
-    // input
-    const nameInput = document.createElement(INPUT);
-    nameInput.className = 'name-input';
-    nameInput.placeholder = 'Podaj imie i nazwisko';
-
-    const ageInput = document.createElement(INPUT);
-    ageInput.className = 'age-input';
-    ageInput.type = 'number';
-    ageInput.placeholder = 'Podaj wiek';
-
-    const submitInput = document.createElement(INPUT);
-    submitInput.type = 'submit';
-    submitInput.className = 'submit-input';
-    submitInput.value = 'Dodaj';
-
-    // textArea
-    const textArea = document.createElement(TEXT_AREA);
-    textArea.className = 'text-area';
-    textArea.placeholder = 'Wpisz opis';
+    // FORM: create node elements with attributes
+    const formContainer = createItem(DIV,'form-container');
+    const inputsContainer = createItem(DIV,'inputs-container');
+    const textAreaAndButtonContainer = createItem(DIV,'text-button-container');
+    const form = createItem(FORM,'form');
+    const nameInput = createInputOrTextArea(INPUT, 'name-input', 'Podaj imie i nazwisko');
+    const ageInput = createInputOrTextArea(INPUT, 'age-input', 'Podaj wiek', 'number');
+    const submitInput = createInputOrTextArea(INPUT, 'submit-input', undefined, 'submit', 'Dodaj');
+    const textArea = createInputOrTextArea(TEXT_AREA, 'text-area', 'Wpisz opis');
 
     // insert element to document body
     document.body.appendChild(formContainer);
@@ -198,14 +132,9 @@ window.addEventListener('load', function() {
     textAreaAndButtonContainer.appendChild(textArea);
     textAreaAndButtonContainer.appendChild(submitInput);
 
-    /* =============================================
-                   CONTROLLER
-    ============================================== */
+    //  ==========  CONTROLLER  ===========
 
-    /* ----------------------------------------
-        ADD item to list
-    ---------------------------------------- */
-
+    // ADD item to list
     submitInput.onclick = (e) => {
         e.preventDefault();
         const id = Math.random().toString();
@@ -228,10 +157,7 @@ window.addEventListener('load', function() {
         textArea.value = '';
     }
 
-    /* ----------------------------------------
-        REMOVE item from list
-    ---------------------------------------- */
-
+    // REMOVE item from list
     const removeItem = (elementId) => {
         // remove in array
         addedData = addedData.filter(data => data.id !== elementId);
@@ -241,13 +167,10 @@ window.addEventListener('load', function() {
         removeElement?.parentNode.removeChild(removeElement);
     }
 
-    /* ----------------------------------------
-        MOVE items
-    ---------------------------------------- */
-
-    const moveItemUp = (e) => {
-        const currentId = e.currentTarget.id;
-        addedData?.map((data, index) => {
+    // MOVE items
+    const moveItemUp = (currentId) => {
+        // const currentId = e.currentTarget.id;
+        addedData?.forEach((data, index) => {
             if (data.id === currentId) {
                 if (index === 0) {
                     if (addedData.length > 1) {
@@ -268,7 +191,7 @@ window.addEventListener('load', function() {
                     let siblingDataIndex;
                     let movedDataElement;
                     const copyAddedData = [...addedData]
-                    copyAddedData?.map((data, index) => {
+                    copyAddedData?.forEach((data, index) => {
                         if (data.id === currentId) {
                             siblingDataIndex = index - 1;
                             movedDataElement = copyAddedData.splice(index, 1);
@@ -283,7 +206,7 @@ window.addEventListener('load', function() {
                     const children = [...moveElement?.parentNode.childNodes];
 
                     let siblingChildIndex;
-                    children.map((child, index) => {
+                    children.forEach((child, index) => {
                         if (child.id === currentId) {
                             siblingChildIndex = index - 1;
                         }
@@ -296,10 +219,10 @@ window.addEventListener('load', function() {
 
     }
 
-    const moveItemDown = (e) => {
-        const currentId = e.currentTarget.id;
+    const moveItemDown = (currentId) => {
+        // const currentId = e.currentTarget.id;
         const addedDataLength = addedData.length - 1;
-        addedData?.map((data, index) => {
+        addedData?.forEach((data, index) => {
             if (data.id === currentId) {
                 if (index === addedDataLength) {
                     if (addedData.length > 1) {
@@ -321,7 +244,7 @@ window.addEventListener('load', function() {
                     let siblingDataIndex;
                     let movedDataElement;
                     const copyAddedData = [...addedData]
-                    copyAddedData?.map((data, index) => {
+                    copyAddedData?.forEach((data, index) => {
                         if (data.id === currentId) {
                             siblingDataIndex = index + 1;
                             movedDataElement = copyAddedData.splice(index, 1);
@@ -335,7 +258,7 @@ window.addEventListener('load', function() {
                     const parent = moveElement?.parentNode;
                     const children = [...moveElement?.parentNode.childNodes];
                     let siblingChildIndex;
-                    children.map((child, index) => {
+                    children.forEach((child, index) => {
                         if (child.id === currentId) {
                             siblingChildIndex = index + 2;
                         }
